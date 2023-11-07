@@ -1,0 +1,16 @@
+services:
+  postgres: #name of the service
+    container_name: postgres_nftauction_container #container name
+    image: postgres #repository image name
+    environment:
+      #- POSTGRES_USER=PostgresBarisUser we use default user name
+      - POSTGRES_PASSWORD=postgresbarispassword
+      #- POSTGRES_DB=PostgresNFTAuctions no need to define here second time for now
+    ports:
+      # access Postgress Inside/Outside of Docker on that ports
+      - 5432:5432
+    volumes:
+      #this allows Docker to use external storage to Docker, our operating system storage to store the data for our database.
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

@@ -1,7 +1,9 @@
-﻿using NFTAuctionService.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using NFTAuctionService.Entities;
 
 namespace NFTAuctionService;
 
+[Table("NFTAuctionItems")]
 public class NFTAuctionItem
 {
     public Guid Id { get; set; }
