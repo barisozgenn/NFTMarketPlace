@@ -10,7 +10,9 @@ builder.Services.AddDbContext<NFTAuctionDbContext>(options => {
 //we specify the location of where our mapping profiles are.
 //It's going to take a look for any classes that derive from the profile class and register the mappings in memory
 //so that when it comes to using Automapper, it's already set up and good to go. inherited from : Profile
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 var app = builder.Build();
 

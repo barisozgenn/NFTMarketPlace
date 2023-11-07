@@ -10,7 +10,6 @@ public class NFTAuctionDto
     public int CurrentHighestBid { get; set; }
     public DateTime NFTAuctionEndAt { get; set; }
     public string Status  { get; set; }
-    public NFTAuctionItem Item  { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     // NFTAuctionItem 

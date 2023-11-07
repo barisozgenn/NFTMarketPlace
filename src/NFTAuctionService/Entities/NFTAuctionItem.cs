@@ -15,7 +15,7 @@ public class NFTAuctionItem
     public string ContentUrl { get; set; }
 
     // nav properties
-
-    public Guid NFTAuctionId { get; set; }
     public NFTAuction NFTAuction { get; set; }
+    public Guid NFTAuctionId { get; set; }
+   
 }
