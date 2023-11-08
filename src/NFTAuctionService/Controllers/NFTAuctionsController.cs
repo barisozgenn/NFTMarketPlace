@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NFTAuctionService.Data;
 using NFTAuctionService.DTOs;
+using NFTAuctionService.Entities;
 
 namespace NFTAuctionService.Controller;
 [ApiController]
@@ -38,5 +39,57 @@ public class NFTAuctionsController: ControllerBase
         if(nftAuction == null) return NotFound();
 
         return _mapper.Map<NFTAuctionDto>(nftAuction);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<NFTAuctionDto>> CreateNFTAuction(CreateNFTAuctionDto nftAuctionDto){
+
+        var nftAuction = _mapper.Map<NFTAuction>(nftAuctionDto);//Map from CreatedNFTAuctionDto tp NFTAuction
+        //TODO: add current user as seller
+        nftAuction.Seller = "test baris seller";
+
+        _context.NFTAuctions.Add(nftAuction);
+        var result = await _context.SaveChangesAsync() > 0;
+
+        if(!result) return BadRequest("Could not save changes to the DB");
+
+        return  CreatedAtAction(nameof(GetById),//call method name
+                                new {nftAuction.Id},//called method's parameter
+                                _mapper.Map<NFTAuctionDto>(nftAuction));//returned result
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult> UpdateNFTAuction(Guid id, UpdateNFTAuctionDto nftAuctionDto){
+
+        var nftAuction = await _context.NFTAuctions.Include(it => it.Item)
+                                                    .FirstOrDefaultAsync(it => it.Id == id);
+        if(nftAuction == null) return NotFound();
+        //TODO: check seller == username
+
+        //TODO: create a control system for catching what parameter user changes and we need to only update them
+        nftAuction.Item.Name = nftAuctionDto.Name ?? nftAuction.Item.Name;
+        nftAuction.Item.Tags = nftAuctionDto.Tags ?? nftAuction.Item.Tags;
+
+        var result = await _context.SaveChangesAsync() > 0;
+
+        if(result) return Ok();
+        return BadRequest("Some errors during saving changes");
+    }
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteAuction(Guid id)
+    {
+        var auction = await _context.NFTAuctions.FindAsync(id);
+
+        if (auction == null) return NotFound();
+
+        if (auction.Seller != User.Identity.Name) return Forbid();
+
+        _context.NFTAuctions.Remove(auction);
+
+        var result = await _context.SaveChangesAsync() > 0;
+
+        if (!result) return BadRequest("Could not update DB");
+
+        return Ok();
     }
 }
