@@ -1,8 +1,11 @@
-﻿namespace NFTAuctionService.DTOs;
+﻿using MongoDB.Entities;
 
-public class NFTAuctionDto
+namespace SearchService.Models;
+
+public class NFTAuctionItem: Entity
 {
-    public Guid Id { get; set; }
+    // We do not need to define ID because it is coming from mongodb Entity
+    //public string ID { get; set; }
     public int ReservePrice { get; set; }
     public string Seller { get; set; }
     public string Winner { get; set; }

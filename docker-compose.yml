@@ -3,7 +3,7 @@ services:
     container_name: postgres_nftauction_container #container name
     image: postgres #repository image name
     environment:
-      #- POSTGRES_USER=PostgresBarisUser we use default user name
+      #- POSTGRES_USER=PostgresBarisUser we use default user name, in appsettings json
       - POSTGRES_PASSWORD=postgresbarispassword
       #- POSTGRES_DB=PostgresNFTAuctions no need to define here second time for now
     ports:
@@ -11,6 +11,17 @@ services:
       - 5432:5432
     volumes:
       #this allows Docker to use external storage to Docker, our operating system storage to store the data for our database.
-      - pgdata:/var/lib/postgresql/data
+      - nftauctionpostgre:/var/lib/postgresql/data
+  mongodb:
+    container_name: mongo_nftauction_container
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=mongobarispassword
+    ports:
+      - 27017:27017
+    volumes:
+      - nftauctionmongodata:/var/lib/mongodb/data
 volumes:
-  pgdata:
+  nftauctionpostgre:
+  nftauctionmongodata:
