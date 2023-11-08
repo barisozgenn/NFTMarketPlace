@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NFTAuctionService.Data;
@@ -28,6 +29,17 @@ public class NFTAuctionsController: ControllerBase
             .ToListAsync();
 
         return _mapper.Map<List<NFTAuctionDto>>(nftAuctions);
+    }
+    [HttpGet("/HttpClient/{date}")]
+    // We will call this service from SearchService/Services/NFTAuctionServiceHttpClient to test httpclient
+    public async Task<ActionResult<List<NFTAuctionDto>>> GetAllWithHttpRequest(string date){
+
+        var query = _context.NFTAuctions.OrderBy(i => i.Item.Name).AsQueryable();
+        if(!string.IsNullOrEmpty(date)){
+            query = query.Where(i => i.UpdatedAt.CompareTo(DateTime.Parse(date).ToUniversalTime()) > 0);
+        }
+
+        return await query.ProjectTo<NFTAuctionDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
     [HttpGet("{id}")]
     public async Task<ActionResult<NFTAuctionDto>> GetById(Guid id){

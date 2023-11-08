@@ -1,8 +1,15 @@
+using System.Net;
+using Polly;
+using Polly.Extensions.Http;
 using SearchService.Data;
+using SearchService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
+//register NFTAuctionServiceHttpClient
+builder.Services.AddHttpClient<NFTAuctionServiceHttpClient>().AddPolicyHandler(GetPolicy());
 
 var app = builder.Build();
 
@@ -10,7 +17,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 //let move DB initializer code to DbInitializer.cs
-/*
+/*FOR: db init dependencies here
 await DB.InitAsync("SearchNftAuctionDb",
                 MongoClientSettings.FromConnectionString(builder.Configuration.
                                                         GetConnectionString("MongoDbBarisDevConnection")));//mongodb://username:password@hostname:port
@@ -22,12 +29,32 @@ await DB.Index<NFTAuctionItem>()
         .Key(k => k.Artist, KeyType.Text)
         .CreateAsync();
 */
-try{
+//FOR: db init dependencies in DBInitializer.cs
+/*try{
     await DbInitializer.InitDb(app: app);
 }
 catch(Exception ex){
     Console.WriteLine(ex);
-}
-
+}*/
+//FOR: db init dependencies in DBInitializer.cs
+//and we've got a bit of resiliency with our not good practice Http service to go and get the data
+//even though the remote NftAuctionService is down, we've kind of removed a bit of dependency on that.
+app.Lifetime.ApplicationStarted.Register(async () =>
+{
+    try
+    {
+        await DbInitializer.InitDb(app);
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+    }
+});
 app.Run();
 
+//we added Polly nuget to handle and react any remote http client api failure conditions
+static IAsyncPolicy<HttpResponseMessage> GetPolicy()
+    => HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
+        .WaitAndRetryForeverAsync(_ => TimeSpan.FromSeconds(3));

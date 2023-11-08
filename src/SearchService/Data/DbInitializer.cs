@@ -1,12 +1,16 @@
 ﻿using System.Text.Json;
+using Microsoft.OpenApi.Writers;
 using MongoDB.Driver;
 using MongoDB.Entities;
 using SearchService.Models;
+using SearchService.Services;
 
 namespace SearchService.Data;
 
 public class DbInitializer
 {
+    //OPINION: in a real big enterprise level application, you wouldn't be using MongoDB to provide the search 
+    //You would be using something different with better technologies to go out and crawl the content that you want to index and put in that database.
     public static async Task InitDb(WebApplication app){
         await DB.InitAsync("SearchNftAuctionDb",
                 MongoClientSettings.FromConnectionString(app.Configuration.
@@ -20,13 +24,21 @@ public class DbInitializer
                 .CreateAsync();
 
         var nftItemsCount = await DB.CountAsync<NFTAuctionItem>();
-        if(nftItemsCount == 0){
+
+        //FOR: test db initializer
+        /*if(nftItemsCount == 0){
             Console.WriteLine("DEBUG: no data seed, DbInitializer will seed them");
             var nftItemsData = await File.ReadAllTextAsync("Data/nftauctions.json");
             var jsonOptions = new JsonSerializerOptions{PropertyNameCaseInsensitive = true };
             var nftItems = JsonSerializer.Deserialize<List<NFTAuctionItem>>(nftItemsData,options: jsonOptions);
 
             await DB.SaveAsync(nftItems);
-        }
+        }*/
+        //FOR: http client initializer
+        using var scope = app.Services.CreateScope();
+        var httpClient = scope.ServiceProvider.GetRequiredService<NFTAuctionServiceHttpClient>();
+        var items = await httpClient.GetItemsToSearchDbFromHttpClient();
+        Console.WriteLine("DEBUG: returned from http nft auction service: "+items.Count);
+        if(items.Count>0)await DB.SaveAsync(items);
     }
 }
