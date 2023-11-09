@@ -25,6 +25,7 @@ public class NFTAuctionServiceHttpClient
             .Project(x => x.UpdatedAt.ToString())
             .ExecuteFirstAsync();
 
-        return await _httpClient.GetFromJsonAsync<List<NFTAuctionItem>>(_configuration["NFTAuctionServiceUrl"]                                                                + "/api/nft-auctions/HttpClient/date=" + lastUpdated);
+        return await _httpClient.GetFromJsonAsync<List<NFTAuctionItem>>(_configuration["NFTAuctionServiceUrl"]
+                                                            + "/api/nftauctions/httpClient?date=" + lastUpdated);
     }
 }

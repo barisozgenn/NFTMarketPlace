@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using NFTAuctionService.Consumers;
 using NFTAuctionService.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,17 +14,26 @@ builder.Services.AddDbContext<NFTAuctionDbContext>(options => {
 //so that when it comes to using Automapper, it's already set up and good to go. inherited from : Profile
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //We registered mass transit and it is is really the equivalent to of entity framework. We will manage rabbitmq with
-builder.Services.AddMassTransit(x => 
+builder.Services.AddMassTransit(mst =>
 {
-    /*x.AddEntityFrameworkOutbox<AuctionDbContext>(o =>
+    // Adding MassTransit Outbox support for Entity Framework with specified DbContext (NFTAuctionDbContext).
+    mst.AddEntityFrameworkOutbox<NFTAuctionDbContext>(outbox =>
     {
-        o.QueryDelay = TimeSpan.FromSeconds(10);
-        o.UsePostgres();
-        o.UseBusOutbox();
+        //If the service bus is available, the message will be delivered immediately.
+        //But if it's not, then every 10s because of this configuration, it's going to attempt to look inside
+        outbox.QueryDelay = TimeSpan.FromSeconds(10);
+        //by the way, this mass transit package, it doesn't have a SQL Server option.
+        outbox.UsePostgres();
+        outbox.UseBusOutbox();
     });
-    x.AddConsumersFromNamespaceContaining<AuctionCreatedFaultConsumer>();
-    x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("auction", false));*/
-    x.UsingRabbitMq((context, configuration) =>
+    // Adding consumers for MassTransit from the namespace containing NFTAuctionCreatedFaultConsumer.
+    //Faulted message and we can see that we're consuming the faulty creation there, which means it would have put that message back on the bus.
+    mst.AddConsumersFromNamespaceContaining<NFTAuctionCreatedFaultConsumer>();
+    //it's going to be nftauction-nftauction-created we separated our consumers endpoints
+    //we can follow by their name then under RabbitMQ dashboard http://localhost:15672/#/exchanges
+    mst.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("nftauction", false));
+    // Configuring endpoints for the RabbitMQ bus using the provided context.
+    mst.UsingRabbitMq((context, configuration) =>
     {
         configuration.ConfigureEndpoints(context);
     });

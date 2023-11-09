@@ -5,14 +5,14 @@ using SearchService.Models;
 
 namespace SearchService.Controllers;
 [ApiController]
-[Route("api/search/nft-auctions")]
+[Route("api/search")]
 public class SearchController: ControllerBase
 {
     //NOTE: if you're wondering why I'm using ActionResult
     //we can quite happily use IActionResult and this will give us the Http responses
     //The only thing with I action result is it doesn't take a type parameter,
     //so I'm not able to do something like this Task<IActionResult<List<NFTAuctionItem>>>, or at least it never used to.
-    [HttpGet]
+    [HttpGet("nftauctions")]
     //public async Task<ActionResult<List<NFTAuctionItem>>> SearchItems(string searchText,int pageNumber = 1,int pageSize = 4)
     public async Task<ActionResult<List<NFTAuctionItem>>> SearchItems([FromQuery] SearchParameters searchParameters){
 

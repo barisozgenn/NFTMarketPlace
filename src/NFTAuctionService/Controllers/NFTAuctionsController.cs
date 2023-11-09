@@ -10,7 +10,7 @@ using NFTAuctionService.Entities;
 
 namespace NFTAuctionService.Controller;
 [ApiController]
-[Route("api/nft-auctions")]
+[Route("api/nftauctions")]
 public class NFTAuctionsController: ControllerBase
 {
     private readonly NFTAuctionDbContext _context;
@@ -25,7 +25,7 @@ public class NFTAuctionsController: ControllerBase
         _publishEndpoint = publishEndpoint;
     }
 
-    [HttpGet]
+    [HttpGet("all")]
     public async Task<ActionResult<List<NFTAuctionDto>>> GetAll(){
 
         var nftAuctions = await _context.NFTAuctions
@@ -35,18 +35,18 @@ public class NFTAuctionsController: ControllerBase
 
         return _mapper.Map<List<NFTAuctionDto>>(nftAuctions);
     }
-    [HttpGet("/HttpClient/{date}")]
+    [HttpGet("httpClient")]
     // We will call this service from SearchService/Services/NFTAuctionServiceHttpClient to test httpclient
-    public async Task<ActionResult<List<NFTAuctionDto>>> GetAllWithHttpRequest(string date){
+    public async Task<ActionResult<List<NFTAuctionDto>>> GetAllWithHttpRequest([FromQuery]string date){
 
         var query = _context.NFTAuctions.OrderBy(i => i.Item.Name).AsQueryable();
         if(!string.IsNullOrEmpty(date)){
-            query = query.Where(i => i.UpdatedAt.CompareTo(DateTime.Parse(date).ToUniversalTime()) > 0);
+            query = query.Where(i => i.UpdatedAt.CompareTo(DateTime.Parse(date).ToUniversalTime()) < 0);
         }
 
         return await query.ProjectTo<NFTAuctionDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
-    [HttpGet("{id}")]
+    [HttpGet("byId/{id}")]
     public async Task<ActionResult<NFTAuctionDto>> GetById(Guid id){
 
         var nftAuction = await _context.NFTAuctions
@@ -66,10 +66,12 @@ public class NFTAuctionsController: ControllerBase
         nftAuction.Seller = "test baris seller";
 
         _context.NFTAuctions.Add(nftAuction);
-        var result = await _context.SaveChangesAsync() > 0;
 
         var newNftAuction = _mapper.Map<NFTAuctionDto>(nftAuction);
+
         await _publishEndpoint.Publish(_mapper.Map<NFTAuctionCreated>(newNftAuction));
+
+        var result = await _context.SaveChangesAsync() > 0;
 
         if(!result) return BadRequest("Could not save changes to the DB");
 
@@ -96,7 +98,7 @@ public class NFTAuctionsController: ControllerBase
     }
     */
 
-    [HttpPut("{id}")]
+    [HttpPut("byId/{id}")]
     public async Task<ActionResult> UpdateNFTAuction(Guid id, UpdateNFTAuctionDto nftAuctionDto){
 
         var nftAuction = await _context.NFTAuctions.Include(it => it.Item)
@@ -113,7 +115,7 @@ public class NFTAuctionsController: ControllerBase
         if(result) return Ok();
         return BadRequest("Some errors during saving changes");
     }
-    [HttpDelete("{id}")]
+    [HttpDelete("byId/{id}")]
     public async Task<ActionResult> DeleteAuction(Guid id)
     {
         var auction = await _context.NFTAuctions.FindAsync(id);

@@ -20,7 +20,7 @@ public class NFTAuctionCreatedConsumer : IConsumer<NFTAuctionCreated>
         Console.WriteLine("DEBUG --> Consuming nftauction_id:("+context.Message.Id+") created");
 
         var nftItem = _mapper.Map<NFTAuctionItem>(context.Message);
-
+        //let's simply test how can we deal with error, it is not for real life but just for us understanding
         if (nftItem.Name == "Foo") throw new ArgumentException("Cannot sell nft with name of Foo");
 
         await nftItem.SaveAsync();
