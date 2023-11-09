@@ -1,16 +1,37 @@
 using System.Net;
+using MassTransit;
 using Polly;
 using Polly.Extensions.Http;
+using SearchService;
 using SearchService.Data;
 using SearchService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
+//prodive mapping profile
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //register NFTAuctionServiceHttpClient
 builder.Services.AddHttpClient<NFTAuctionServiceHttpClient>().AddPolicyHandler(GetPolicy());
-
+//We registered mass transit and it is is really the equivalent to of entity framework. We will manage rabbitmq with
+builder.Services.AddMassTransit(x => 
+{
+    /*x.AddEntityFrameworkOutbox<AuctionDbContext>(o =>
+    {
+        o.QueryDelay = TimeSpan.FromSeconds(10);
+        o.UsePostgres();
+        o.UseBusOutbox();
+    });*/
+    //any other consumers we create in this same namespace are automatically going to be registered by mass transit.
+    x.AddConsumersFromNamespaceContaining<NFTAuctionCreatedConsumer>();
+    //it's going to be search-nftauction-created we separated our consumers endpoints
+    //we can follow by their name then under RabbitMQ dashboard http://localhost:15672/#/exchanges
+    x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("search", false));
+    x.UsingRabbitMq((context, configuration) =>
+    {
+        configuration.ConfigureEndpoints(context);
+    });
+});
 var app = builder.Build();
 
 app.UseAuthorization();

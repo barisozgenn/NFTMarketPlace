@@ -22,6 +22,12 @@ services:
       - 27017:27017
     volumes:
       - nftauctionmongodata:/var/lib/mongodb/data
+  rabbitmq: #default username and password: guest
+    container_name: rabbitmq_nftauction_container
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
 volumes:
   nftauctionpostgre:
   nftauctionmongodata:

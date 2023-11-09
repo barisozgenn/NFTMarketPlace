@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Contracts.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NFTAuctionService.Data;
@@ -13,11 +15,14 @@ public class NFTAuctionsController: ControllerBase
 {
     private readonly NFTAuctionDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public NFTAuctionsController(NFTAuctionDbContext context, IMapper mapper)
+    public NFTAuctionsController(NFTAuctionDbContext context, IMapper mapper, 
+                                IPublishEndpoint publishEndpoint)
     {
         _context = context;
         _mapper = mapper;
+        _publishEndpoint = publishEndpoint;
     }
 
     [HttpGet]
@@ -63,12 +68,33 @@ public class NFTAuctionsController: ControllerBase
         _context.NFTAuctions.Add(nftAuction);
         var result = await _context.SaveChangesAsync() > 0;
 
+        var newNftAuction = _mapper.Map<NFTAuctionDto>(nftAuction);
+        await _publishEndpoint.Publish(_mapper.Map<NFTAuctionCreated>(newNftAuction));
+
+        if(!result) return BadRequest("Could not save changes to the DB");
+
+        return  CreatedAtAction(nameof(GetById),//call method name
+                                new {nftAuction.Id},//called method's parameter
+                                newNftAuction);//returned result
+    }
+    /*NOT: without service bus or rabbitmq version
+    [HttpPost]
+    public async Task<ActionResult<NFTAuctionDto>> CreateNFTAuction(CreateNFTAuctionDto nftAuctionDto){
+
+        var nftAuction = _mapper.Map<NFTAuction>(nftAuctionDto);//Map from CreatedNFTAuctionDto tp NFTAuction
+        //TODO: add current user as seller
+        nftAuction.Seller = "test baris seller";
+
+        _context.NFTAuctions.Add(nftAuction);
+        var result = await _context.SaveChangesAsync() > 0;
+
         if(!result) return BadRequest("Could not save changes to the DB");
 
         return  CreatedAtAction(nameof(GetById),//call method name
                                 new {nftAuction.Id},//called method's parameter
                                 _mapper.Map<NFTAuctionDto>(nftAuction));//returned result
     }
+    */
 
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateNFTAuction(Guid id, UpdateNFTAuctionDto nftAuctionDto){
