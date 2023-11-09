@@ -9,5 +9,6 @@ public class MappingProfiles: Profile // AutoMapper
     public MappingProfiles()
     {
         CreateMap<NFTAuctionCreated, NFTAuctionItem>();
+        CreateMap<NFTAuctionUpdated, NFTAuctionItem>();
     }
 }

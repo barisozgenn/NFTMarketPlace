@@ -16,6 +16,9 @@ public class MappingProfiles: Profile // AutoMapper
         CreateMap<CreateNFTAuctionDto, NFTAuctionItem>();
         //If we were using a different technology, we would need to create an object that matches the properties.
         CreateMap<CreateNFTAuctionDto, NFTAuctionCreated>();
+        //I've also included members because we are updating item properties
+        CreateMap<NFTAuction, NFTAuctionUpdated>().IncludeMembers(a => a.Item);
+        CreateMap<NFTAuctionItem, NFTAuctionUpdated>();
     }
     //also its dependency added program.cs
 }

@@ -68,7 +68,7 @@ public class NFTAuctionsController: ControllerBase
         _context.NFTAuctions.Add(nftAuction);
 
         var newNftAuction = _mapper.Map<NFTAuctionDto>(nftAuction);
-
+        //publish it to service bus rabbitmq
         await _publishEndpoint.Publish(_mapper.Map<NFTAuctionCreated>(newNftAuction));
 
         var result = await _context.SaveChangesAsync() > 0;
@@ -109,6 +109,8 @@ public class NFTAuctionsController: ControllerBase
         //TODO: create a control system for catching what parameter user changes and we need to only update them
         nftAuction.Item.Name = nftAuctionDto.Name ?? nftAuction.Item.Name;
         nftAuction.Item.Tags = nftAuctionDto.Tags ?? nftAuction.Item.Tags;
+        //publish it to service bus
+        await _publishEndpoint.Publish(_mapper.Map<NFTAuctionUpdated>(nftAuction));
 
         var result = await _context.SaveChangesAsync() > 0;
 
@@ -125,6 +127,8 @@ public class NFTAuctionsController: ControllerBase
         if (auction.Seller != User.Identity.Name) return Forbid();
 
         _context.NFTAuctions.Remove(auction);
+        //publish it to service bus
+        await _publishEndpoint.Publish<NFTAuctionDeleted>(new { Id = auction.Id.ToString() });
 
         var result = await _context.SaveChangesAsync() > 0;
 

@@ -1,7 +1,7 @@
 ﻿namespace Contracts.Events;
 
 public class NFTAuctionUpdated
-{   
+{
     public string Id { get; set; }
     public string Name { get; set; }
     public int IndexInCollection { get; set; }
