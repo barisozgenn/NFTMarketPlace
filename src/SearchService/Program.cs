@@ -25,6 +25,14 @@ builder.Services.AddMassTransit(mst =>
 
     mst.UsingRabbitMq((context, configuration) =>
     {
+        //Docker can use a different location for Rabbitmq so that it can connect to Rabbitmq when it's running inside a container.
+        //we need to add some extra configuration where we're using Rabbitmq.
+        //And we're getting this configuration from a rabbitmq section inside our configuration files now.
+        configuration.Host(builder.Configuration["RabbitMq:Host"], "/", host =>
+        {
+            host.Username(builder.Configuration.GetValue("RabbitMq:Username", "guest"));
+            host.Password(builder.Configuration.GetValue("RabbitMq:Password", "guest"));
+        });
         // Setting up a RabbitMQ message consumer for the "search-auction-created" endpoint.
         configuration.ReceiveEndpoint("search-auction-created", enf =>
         {
