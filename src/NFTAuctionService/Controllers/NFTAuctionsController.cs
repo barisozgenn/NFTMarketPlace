@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Contracts.Events;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NFTAuctionService.Data;
@@ -58,12 +59,13 @@ public class NFTAuctionsController: ControllerBase
         return _mapper.Map<NFTAuctionDto>(nftAuction);
     }
 
+    [Authorize]//We don't want anonymous users, for example, to be able to create,update,delete
     [HttpPost]
     public async Task<ActionResult<NFTAuctionDto>> CreateNFTAuction(CreateNFTAuctionDto nftAuctionDto){
 
         var nftAuction = _mapper.Map<NFTAuction>(nftAuctionDto);//Map from CreatedNFTAuctionDto tp NFTAuction
-        //TODO: add current user as seller
-        nftAuction.Seller = "test baris seller";
+
+        nftAuction.Seller = User.Identity.Name;//that's going to give us the username.
 
         _context.NFTAuctions.Add(nftAuction);
 
@@ -98,13 +100,14 @@ public class NFTAuctionsController: ControllerBase
     }
     */
 
+    [Authorize]//We don't want anonymous users, for example, to be able to create,update,delete
     [HttpPut("byId/{id}")]
     public async Task<ActionResult> UpdateNFTAuction(Guid id, UpdateNFTAuctionDto nftAuctionDto){
 
         var nftAuction = await _context.NFTAuctions.Include(it => it.Item)
                                                     .FirstOrDefaultAsync(it => it.Id == id);
         if(nftAuction == null) return NotFound();
-        //TODO: check seller == username
+        if(nftAuction.Seller != User.Identity.Name) return Forbid();//for http 403 response
 
         //TODO: create a control system for catching what parameter user changes and we need to only update them
         nftAuction.Item.Name = nftAuctionDto.Name ?? nftAuction.Item.Name;
@@ -117,6 +120,7 @@ public class NFTAuctionsController: ControllerBase
         if(result) return Ok();
         return BadRequest("Some errors during saving changes");
     }
+    [Authorize]//We don't want anonymous users, for example, to be able to create,update,delete
     [HttpDelete("byId/{id}")]
     public async Task<ActionResult> DeleteAuction(Guid id)
     {
@@ -124,7 +128,7 @@ public class NFTAuctionsController: ControllerBase
 
         if (auction == null) return NotFound();
 
-        if (auction.Seller != User.Identity.Name) return Forbid();
+        if (auction.Seller != User.Identity.Name) return Forbid();//for http 403 response
 
         _context.NFTAuctions.Remove(auction);
         //publish it to service bus

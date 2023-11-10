@@ -1,4 +1,5 @@
 using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using NFTAuctionService.Consumers;
 using NFTAuctionService.Data;
@@ -38,9 +39,19 @@ builder.Services.AddMassTransit(mst =>
         configuration.ConfigureEndpoints(context);
     });
 });
+// We added JwtBearer in our project to use IdentityServer
+//and to Authenticate our users because it won't be used without being user
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options => 
+    {
+        options.Authority = builder.Configuration["IdentityServerBarisDevUrl"];
+        options.RequireHttpsMetadata = false;//because our identity server running on http for dev
+        options.TokenValidationParameters.ValidateAudience = false;
+        options.TokenValidationParameters.NameClaimType = "username";
+    });
 
 var app = builder.Build();
-
+app.UseAuthentication();//If we don't do this, we cannot authenticate, it should be before UseAuthorization
 app.UseAuthorization();
 app.MapControllers();
 
