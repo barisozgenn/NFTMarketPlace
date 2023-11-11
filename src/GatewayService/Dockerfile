@@ -1,4 +1,3 @@
-#For more comment and detail explanation, check NFTAuctionService dockerfile
 FROM mcr.microsoft.com/dotnet/sdk:8.0 as build
 WORKDIR /app
 EXPOSE 80
@@ -15,17 +14,13 @@ COPY src/IdentityService/IdentityService.csproj src/IdentityService/IdentityServ
 # Restore package deps
 RUN dotnet restore NFTMarketPlace.sln
 
-# Copy the app folders over and in this project there is no dependencies so we do not add another services or classlib here
-COPY src/IdentityService src/IdentityService
-WORKDIR /app/src/IdentityService
+# Copy the app folders over
+COPY src/GatewayService src/GatewayService
+WORKDIR /app/src/GatewayService
 RUN dotnet publish -c Release -o /app/src/out
 
 # Build runtime image
-# IdentityService should run on dotnet 7 because still dotnet 8 not avaible for it
-# also we created this microservice with dotnet 7
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/src/out .
-ENTRYPOINT [ "dotnet", "IdentityService.dll" ]
-
-
+ENTRYPOINT [ "dotnet", "GatewayService.dll" ]

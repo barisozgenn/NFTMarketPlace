@@ -4,11 +4,17 @@
 <div class="welcome-page">
     <h1>
         <img src="~/duende-logo.svg" class="logo">
-        Welcome to Duende IdentityServer
+        Welcome to Duende IdentityServer Baris
         <small class="text-muted">(version @Model.Version)</small>
     </h1>
 
     <ul>
+        <li>
+            Baris OZGEN @DateTime.UtcNow.ToShortTimeString()</br>
+            <b>docker localIP:</b> @HttpContext.Connection.LocalIpAddress.ToString()
+            <br>
+            <b>docker remoteip:</b> @HttpContext.Connection.RemoteIpAddress.ToString()
+        </li>
         <li>
             IdentityServer publishes a
             <a href="~/.well-known/openid-configuration">discovery document</a>

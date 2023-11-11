@@ -12,5 +12,6 @@ public class Index : PageModel
     public void OnGet()
     {
         Version = typeof(Duende.IdentityServer.Hosting.IdentityServerMiddleware).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion.Split('+').First();
+        //We add here to find out what our LocalIpAddress is
     }
 }
