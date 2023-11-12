@@ -1,5 +1,12 @@
 {
   "dependencies": {
-    "react-icons": "^4.11.0"
+    "flowbite": "^2.1.1",
+    "flowbite-react": "^0.6.4",
+    "query-string": "^8.1.0",
+    "react-icons": "^4.11.0",
+    "zustand": "^4.4.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2"
   }
 }

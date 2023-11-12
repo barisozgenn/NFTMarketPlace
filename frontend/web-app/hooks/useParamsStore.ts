@@ -9,7 +9,8 @@ type State = {
     orderBy: string
     filterBy: string
 }
-
+//we can make all of these properties optional without actually making them optional 
+//say that this params is going to be of partial.
 type Actions = {
     setParams: (params: Partial<State>) => void
     reset: () => void

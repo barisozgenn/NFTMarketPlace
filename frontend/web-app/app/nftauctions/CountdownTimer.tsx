@@ -22,6 +22,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }:
                 {completed ? (
                     <span>Auction finished</span>
                 ) : (
+                    // server component is being hydrated with the client side code, there might be a small difference between them so ignore it
                     <span suppressHydrationWarning={true}>
                         {zeroPad(days)}:{zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}
                     </span>
