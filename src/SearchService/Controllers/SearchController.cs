@@ -28,8 +28,9 @@ public class SearchController: ControllerBase
         }
 
         query = searchParameters.NftOrderBy switch {
-            "name" => query.Sort(it => it.Ascending(n => n.Name)),
-            "newest" => query.Sort(it => it.Ascending(n => n.Name)),
+            "name" => query.Sort(it => it.Ascending(n => n.Name))
+                            .Sort(it => it.Ascending(n => n.Collection)),
+            "newest" => query.Sort(it => it.Descending(n => n.Name)),
             //Default parameter
             _ => query.Sort(it => it.Ascending(n => n.NFTAuctionEndAt)),
         };

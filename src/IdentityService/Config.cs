@@ -42,7 +42,9 @@ public static class Config
                 RedirectUris = {"http://localhost:3000/api/auth/callback/id-server"},
                 AllowOfflineAccess = true,//we can enable refresh token functionality
                 AllowedScopes = {"openid", "profile", "nftAuctionApp"},
-                AccessTokenLifetime = 3600*24*30//we defined for a month and longer than its default for development stage
+                AccessTokenLifetime = 3600*24*30,//we defined for a month and longer than its default for development stage
+                AlwaysIncludeUserClaimsInIdToken = true //We return the two tokens, the access token and the ID token can can contain claims about the user and for the package that we're going to use to help in NextAuth.js
+
             }
         };
 }
