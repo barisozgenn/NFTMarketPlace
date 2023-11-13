@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { UpdateNFTAuctionTest } from '../actions/nftAuctionAction';
+import { updateAuctionTest } from '../actions/nftAuctionAction';
 import { Button } from 'flowbite-react';
 
 export default function AuthTest() {
@@ -11,7 +11,7 @@ export default function AuthTest() {
     function doUpdate() {
         setResult(undefined);
         setLoading(true);
-        UpdateNFTAuctionTest()
+        updateAuctionTest()
             .then(res => setResult(res))
             .finally(() => setLoading(false))
     }

@@ -3,6 +3,9 @@
     "flowbite": "^2.1.1",
     "flowbite-react": "^0.6.4",
     "query-string": "^8.1.0",
+    "react-datepicker": "^4.21.0",
+    "react-hook-form": "^7.48.2",
+    "react-hot-toast": "^2.4.1",
     "react-icons": "^4.11.0",
     "zustand": "^4.4.6"
   },

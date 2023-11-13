@@ -8,6 +8,8 @@ type State = {
     searchValue: string
     orderBy: string
     filterBy: string
+    seller?: string
+    winner?: string
 }
 //we can make all of these properties optional without actually making them optional 
 //say that this params is going to be of partial.
@@ -24,7 +26,9 @@ const initialState: State = {
     searchTerm: '',
     searchValue: '',
     orderBy: 'name',
-    filterBy: 'onLive'
+    filterBy: 'onLive',
+    seller: undefined,
+    winner: undefined
 }
 
 export const useParamsStore = create<State & Actions>()((set) => ({
