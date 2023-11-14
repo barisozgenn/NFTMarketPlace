@@ -28,13 +28,13 @@ public class BidsController : ControllerBase
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<BidDto>> PlaceBid(string auctionId, int price)
+    public async Task<ActionResult<BidDto>> PlaceBid(string nftAuctionId, int price)
     {
-        var nftAuction = await DB.Find<NFTAuction>().OneAsync(auctionId);
+        var nftAuction = await DB.Find<NFTAuction>().OneAsync(nftAuctionId);
 
         if (nftAuction == null)
         {
-            nftAuction = _grpcClient.GetAuction(auctionId);
+            nftAuction = _grpcClient.GetNFTAuction(nftAuctionId);
 
             if (nftAuction == null) return BadRequest("Cannot accept bids on this auction at this time");
         }
@@ -47,7 +47,7 @@ public class BidsController : ControllerBase
         var bid = new Bid
         {
             Price = price,
-            NFTAuctionId = auctionId,
+            NFTAuctionId = nftAuctionId,
             Bidder = User.Identity.Name
         };
 
@@ -58,7 +58,7 @@ public class BidsController : ControllerBase
         else
         {
             var highBid = await DB.Find<Bid>()
-                        .Match(a => a.NFTAuctionId == auctionId)
+                        .Match(a => a.NFTAuctionId == nftAuctionId)
                         .Sort(b => b.Descending(x => x.Price))
                         .ExecuteFirstAsync();
 
@@ -82,11 +82,11 @@ public class BidsController : ControllerBase
         return Ok(_mapper.Map<BidDto>(bid));
     }
 
-    [HttpGet("{auctionId}")]
-    public async Task<ActionResult<List<BidDto>>> GetBidsForAuction(string auctionId)
+    [HttpGet("{nftAuctionId}")]
+    public async Task<ActionResult<List<BidDto>>> GetBidsForAuction(string nftAuctionId)
     {
         var bids = await DB.Find<Bid>()
-            .Match(a => a.NFTAuctionId == auctionId)
+            .Match(a => a.NFTAuctionId == nftAuctionId)
             .Sort(b => b.Descending(a => a.BidDate))
             .ExecuteAsync();
 

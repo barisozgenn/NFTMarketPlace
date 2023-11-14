@@ -19,7 +19,7 @@ public class NFTAuctionFinishedConsumer: IConsumer<NFTAuctionFinished>
     {
         Console.WriteLine("DEBUG: --> Consuming auction finished");
 
-        var nftAuction = await _dbContext.NFTAuctions.FindAsync(context.Message.NFTAuctionId);
+        var nftAuction = await _dbContext.NFTAuctions.FindAsync(Guid.Parse(context.Message.NFTAuctionId));
 
         if (context.Message.ItemSold)
         {

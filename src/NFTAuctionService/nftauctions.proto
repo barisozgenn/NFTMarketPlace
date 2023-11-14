@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "NFTAuctionService";
+
+service GrpcAuction {
+    rpc GetAuction (GetNFTAuctionRequest) returns (GrpcNFTAuctionResponse);
+}
+
+message GetAuctionRequest {
+    string id = 1;
+}
+
+message GrpcAuctionModel {
+    string id = 1;
+    string seller = 2;
+    string nftAuctionEndAt = 3;
+    int32 reservePrice = 4;
+}
+
+message GrpcAuctionResponse {
+    GrpcAuctionModel nftAuction = 1;
+}

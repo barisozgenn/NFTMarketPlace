@@ -18,9 +18,12 @@ public class CheckNFTAuctionFinished: BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("Starting check for finished auctions");
-
+//And we get this cancellation token here and this is triggered when stop async is called 
+//and we can make use of the stopping token to stop execution of any running requests.
+//When this is provided, such as our application shuts down, then we want to stop any database activity
+//and we can use this cancellation token to do that.
         stoppingToken.Register(() => _logger.LogInformation("==> Auction check is stopping"));
-
+//So as long as this cancellation has not been requested
         while (!stoppingToken.IsCancellationRequested)
         {
             await CheckAuctions(stoppingToken);

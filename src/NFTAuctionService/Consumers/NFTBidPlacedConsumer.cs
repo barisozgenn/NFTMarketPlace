@@ -17,7 +17,7 @@ public class NFTBidPlacedConsumer: IConsumer<NFTBidPlaced>
     {
         Console.WriteLine("DEBUG: --> Consuming bid placed");
 
-        var auction = await _dbContext.NFTAuctions.FindAsync(context.Message.NFTAuctionId);
+        var auction = await _dbContext.NFTAuctions.FindAsync(Guid.Parse(context.Message.NFTAuctionId));
 
         if (auction.CurrentHighestBid == null
             || context.Message.BidStatus.Contains("Accepted")//TODO: check here later
