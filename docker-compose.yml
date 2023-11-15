@@ -37,6 +37,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development #we're going to get the full logs about what's going on whilst running in development mode.
       - ASPNETCORE_URLS=http://+:80 #And this is the internal URL that our application, our nft auction service is going to run on.
+      - ASPNETCORE_URLS=http://+:7777 #for http2 gRpc
       # What we need to use is double underscore instead of that colon or curly braces {} because "RabbitMq":{"Host"}.
       #But We're not going to be using local host, but we are going to use rabbitmq as we defined above
       #So we just specify Rabbitmq which matches the name of the container that's running inside Docker.
@@ -51,7 +52,7 @@ services:
       - Kestrel__Endpoints__WebApi__Url=Http://+:80
     ports:
       - 7001:80 # 7001 as the external port as we defined in launchsettins, we access this service on from outside of Docker, but internally it's going to be running on Port 80.
-      - 7777:7777
+      - 7777:7777 #extra port number for gRPC
     depends_on:
     # nft auction service, it depends on services that we want to wait to start, like Rabbitmq or Postgres
     # We can say that our nftauction service depends on postgres and rabbitmq
@@ -117,12 +118,25 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - RabbitMq__Host=rabbitmq
       - ConnectionStrings__MongoBidDbBarisDevConnection=mongodb://root:mongobarispassword@mongodb #instead of localhost:27017
-      - IdentityServiceUrl=http://identity-svc
-      - GrpcAuction=http://nfauction-service:7777
+      - IdentityServiceUrl=http://identity-service
+      - GrpcNFTAuction=http://nfauction-service:7777
     ports:
       - 7003:80
     depends_on:
       - mongodb
+      - rabbitmq
+  notify-service:
+    image: barisozgenn/notify-service:latest
+    build: 
+      context: .
+      dockerfile: src/NotificationService/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - RabbitMq__Host=rabbitmq
+    ports:
+      - 7004:80
+    depends_on:
       - rabbitmq
 volumes:
   nftauctionpostgre:
