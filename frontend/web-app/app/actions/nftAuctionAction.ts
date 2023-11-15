@@ -1,9 +1,9 @@
 
         'use server'
 
-        import { NFTAuction, PagedResult } from "@/types";
+        import { Bid, NFTAuction, PagedResult } from "@/types";
         import { getTokenWorkaround } from "./authAction";
-        import { fetchWrapper } from "@/lib/fetchWrapper";
+        import { fetchWrapper } from "@/app/lib/fetchWrapper";
         import { FieldValues } from "react-hook-form";
         import { revalidatePath } from "next/cache";
 
@@ -36,4 +36,12 @@
 
         export async function deleteAuction(id: string) {
             return await fetchWrapper.del(`nftAuctions/${id}`);
+        }
+
+        export async function getBidsForNFTAuction(id: string): Promise<Bid[]> {
+            return await fetchWrapper.get(`bids/${id}`);
+        }
+
+        export async function placeBidForNFTAuction(nftAuctionId: string, price: number) {
+            return await fetchWrapper.post(`bids?nftAuctionId=${nftAuctionId}&price=${price}`, {})
         }

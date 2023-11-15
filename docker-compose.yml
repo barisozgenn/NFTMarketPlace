@@ -127,7 +127,7 @@ services:
       - rabbitmq
   notify-service:
     image: barisozgenn/notify-service:latest
-    build: 
+    build:
       context: .
       dockerfile: src/NotificationService/Dockerfile
     environment:

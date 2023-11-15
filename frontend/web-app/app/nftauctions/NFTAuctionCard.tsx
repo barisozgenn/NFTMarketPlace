@@ -2,6 +2,7 @@ import React from 'react'
 import CountdownTimer from './CountdownTimer'
 import NFTImage from './NFTImage'
 import { NFTAuction } from '@/types'
+import CurrentBid from './CurrentBid'
 
 type Props = {
     nftauction: NFTAuction
@@ -14,6 +15,11 @@ export default function NFTAuctionCard({ nftauction }: Props) {
                     <NFTImage contentUrl={nftauction.contentUrl} />
                     <div className='absolute bottom-2 left-2'>
                         <CountdownTimer auctionEnd={nftauction.nftAuctionEndAt} />
+                    </div>
+                    <div className='absolute top-2 right-2'>
+                        <CurrentBid 
+                            reservePrice={nftauction.reservePrice} 
+                            price={nftauction.currentHighestBid} />
                     </div>
                 </div>
             </div>

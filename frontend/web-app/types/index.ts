@@ -22,6 +22,22 @@ export type NFTAuction = {
     contentUrl: string
     id: string
 }
+export type Bid = {
+    id: string
+    nftAuctionId: string
+    bidder: string
+    bidTime: string
+    price: number
+    bidStatus: string
+  }
+
+  export type NFTAuctionFinished = {
+    itemSold: boolean
+    nftAuctionId: string
+    winner?: string
+    seller: string
+    price?: number
+  }
 /*
     public Guid Id { get; set; }
     public int ReservePrice { get; set; } = 0;
