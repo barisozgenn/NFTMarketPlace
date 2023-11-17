@@ -39,12 +39,12 @@ public class DbInitializer
                 Item = new NFTAuctionItem
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Artwork1",
-                    Collection = "Collection1",
+                    Name = "Polar Moose #01",
+                    Collection = "Mission: Arctic to Antarctica",
                     IndexInCollection = 1,
-                    Tags = "Tag1, Tag2",
-                    Artist = "Eve",
-                    ContentUrl = "https://example.com/artwork1.jpg"
+                    Tags = "moose, arctic",
+                    Artist = "Baris Ozgen",
+                    ContentUrl = "https://i.seadn.io/s/raw/files/bfe8a505b1f82327b758187172f3e648.png?auto=format&dpr=1&w=1000"
                 },
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -62,12 +62,12 @@ public class DbInitializer
                 Item = new NFTAuctionItem
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Artwork2",
-                    Collection = "Collection2",
+                    Name = "Polar Rabbit #01",
+                    Collection = "Mission: Arctic to Antarctica",
                     IndexInCollection = 2,
-                    Tags = "Tag3, Tag4",
-                    Artist = "David",
-                    ContentUrl = "https://example.com/artwork2.jpg"
+                    Tags = "polar, rabbit, arctic",
+                    Artist = "Baris Ozgen",
+                    ContentUrl = "https://i.seadn.io/s/raw/files/c34c777e01812647f010905f3fa67cc2.png?auto=format&dpr=1&w=1000"
                 },
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -85,12 +85,12 @@ public class DbInitializer
                 Item = new NFTAuctionItem
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Artwork3",
-                    Collection = "Collection3",
+                    Name = "Seal #05",
+                    Collection = "Mission: Arctic to Antarctica",
                     IndexInCollection = 3,
-                    Tags = "Tag5, Tag6",
-                    Artist = "Grace",
-                    ContentUrl = "https://example.com/artwork3.jpg"
+                    Tags = "seal, polar, arctic",
+                    Artist = "Baris Ozgen",
+                    ContentUrl = "https://i.seadn.io/s/raw/files/01d221864a12ad5c693868aea7c0e0d5.png?auto=format&dpr=1&w=1000"
                 },
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -108,12 +108,12 @@ public class DbInitializer
                 Item = new NFTAuctionItem
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Artwork4",
-                    Collection = "Collection4",
+                    Name = "Digital Bear #12",
+                    Collection = "Digital Bear in the house",
                     IndexInCollection = 4,
-                    Tags = "Tag7, Tag8",
-                    Artist = "Ivy",
-                    ContentUrl = "https://example.com/artwork4.jpg"
+                    Tags = "bear, hero",
+                    Artist = "Baris Ozgen",
+                    ContentUrl = "https://i.seadn.io/s/raw/files/04f250925906b30aaf4548d61a7de88b.png?auto=format&dpr=1&w=1000"
                 },
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -131,12 +131,12 @@ public class DbInitializer
                 Item = new NFTAuctionItem
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Artwork5",
-                    Collection = "Collection5",
+                    Name = "Digital Bear #02",
+                    Collection = "Digital Bear in the house",
                     IndexInCollection = 5,
-                    Tags = "Tag9, Tag10",
-                    Artist = "Liam",
-                    ContentUrl = "https://example.com/artwork5.jpg"
+                    Tags = "bear, dj, music",
+                    Artist = "Baris Ozgen",
+                    ContentUrl = "https://i.seadn.io/s/raw/files/9937a51c150697b2c2a229dd89a8228a.png?auto=format&dpr=1&w=1000"
                 },
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -154,12 +154,12 @@ public class DbInitializer
                 Item = new NFTAuctionItem
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Artwork6",
-                    Collection = "Collection6",
+                    Name = "Digital Bear #11",
+                    Collection = "Digital Bear in the house",
                     IndexInCollection = 6,
-                    Tags = "Tag11, Tag12",
-                    Artist = "Nora",
-                    ContentUrl = "https://example.com/artwork6.jpg"
+                    Tags = "bear, warrior",
+                    Artist = "Baris Ozgen",
+                    ContentUrl = "https://i.seadn.io/s/raw/files/12dfd7552e48edaf64b99f57fe8fb477.png?auto=format&dpr=1&w=1000"
                 },
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -177,12 +177,12 @@ public class DbInitializer
                 Item = new NFTAuctionItem
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Artwork7",
-                    Collection = "Collection7",
+                    Name = "SolarX08",
+                    Collection = "SolarX Garage",
                     IndexInCollection = 7,
-                    Tags = "Tag13, Tag14",
-                    Artist = "Quincy",
-                    ContentUrl = "https://example.com/artwork7.jpg"
+                    Tags = "robot",
+                    Artist = "Baris Ozgen",
+                    ContentUrl = "https://i.seadn.io/s/raw/files/a41e788576b129abf6a82fcee539312c.png?auto=format&dpr=1&w=1000"
                 },
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -200,12 +200,12 @@ public class DbInitializer
                 Item = new NFTAuctionItem
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Artwork8",
-                    Collection = "Collection8",
+                    Name = "SolarX02",
+                    Collection = "SolarX Garage",
                     IndexInCollection = 8,
-                    Tags = "Tag15, Tag16",
-                    Artist = "Samuel",
-                    ContentUrl = "https://example.com/artwork8.jpg"
+                    Tags = "robot",
+                    Artist = "Baris Ozgen",
+                    ContentUrl = "https://i.seadn.io/s/raw/files/f5d5bce2d528156245fa42793dff88f0.png?auto=format&dpr=1&w=1000"
                 },
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -223,12 +223,12 @@ public class DbInitializer
                 Item = new NFTAuctionItem
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Artwork9",
-                    Collection = "Collection9",
+                    Name = "SolarX09",
+                    Collection = "SolarX Garage",
                     IndexInCollection = 9,
-                    Tags = "Tag17, Tag18",
-                    Artist = "Victor",
-                    ContentUrl = "https://example.com/artwork9.jpg"
+                    Tags = "robot",
+                    Artist = "Baris Ozgen",
+                    ContentUrl = "https://i.seadn.io/s/raw/files/abb39bd56b51a28722fcec6f07c1f236.png?auto=format&dpr=1&w=1000"
                 },
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -246,12 +246,12 @@ public class DbInitializer
                 Item = new NFTAuctionItem
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Artwork10",
-                    Collection = "Collection10",
+                    Name = "SolarX05",
+                    Collection = "SolarX Garage",
                     IndexInCollection = 10,
-                    Tags = "Tag19, Tag20",
-                    Artist = "Xander",
-                    ContentUrl = "https://example.com/artwork10.jpg"
+                    Tags = "robot",
+                    Artist = "Baris Ozgen",
+                    ContentUrl = "https://i.seadn.io/s/raw/files/8c008b404b29ac0d1663ef4cd0286954.png?auto=format&dpr=1&w=1000"
                 },
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow

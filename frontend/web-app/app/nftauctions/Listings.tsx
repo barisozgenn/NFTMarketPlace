@@ -48,7 +48,7 @@ export default function Listings() {
             setData(data);
             setLoading(false);
         })
-    }, [url]) // whenever the url changes, use effect gets called
+    }, [url, setData]) // whenever the url changes, use effect gets called //we are adding here dependencies
     // if we don't have any dependencies then we would use an empty array, says use effect to run once
 
     if (loading) return <h3>Loading...</h3>

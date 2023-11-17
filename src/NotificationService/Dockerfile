@@ -14,7 +14,7 @@ COPY src/Contracts/Contracts.csproj src/Contracts/Contracts.csproj
 COPY src/IdentityService/IdentityService.csproj src/IdentityService/IdentityService.csproj
 
 # Restore package deps
-RUN dotnet restore NFTMarketPlace.sl
+RUN dotnet restore NFTMarketPlace.sln
 
 # Copy the app folders over
 COPY src/SearchService src/NotificationService

@@ -109,6 +109,7 @@ services:
     ports:
       - 6001:80
   bid-service:
+    container_name: app_bid_service_container
     image: barisozgenn/bid-service:latest
     build:
       context: .
@@ -126,6 +127,7 @@ services:
       - mongodb
       - rabbitmq
   notify-service:
+    container_name: app_notify_service_container
     image: barisozgenn/notify-service:latest
     build:
       context: .
@@ -138,6 +140,27 @@ services:
       - 7004:80
     depends_on:
       - rabbitmq
+#  web-app:
+#    container_name: app_web_app_container
+#    image: barisozgenn/web-app
+#    build:
+#     context: .
+#     dockerfile: frontend/web-app/Dockerfile
+#    volumes:
+#     - /var/lib/web/data
+#    extra_hosts:
+#     - id.nftmarketplace.com:10.5.0.200
+#    environment: # those are coming from .env.local file
+#    - NEXTAUTH_SECRET=somethingreallysecretbaris
+#     - NEXTAUTH_URL=http://app.nftmarketplace.com #externally it's going to use this URL
+#     - NEXTAUTH_URL_INTERNAL=http://web-app:3000 #internally it's going to use this URL
+#     - API_URL=http://gateway-service/
+#     - IDENTITY_URL=http://id.nftmarketplace.com #for externally usage, update your Hostinger in terminal
+#     - NEXT_PUBLIC_NOTIFICATION_URL=http://gateway-service/notifications
+#     - VIRTUAL_HOST=app.nftmarketplace.com
+#     - VIRTUAL_PORT=3000
+#    networks:
+#      custom:
 volumes:
   nftauctionpostgre:
   nftauctionmongodata:

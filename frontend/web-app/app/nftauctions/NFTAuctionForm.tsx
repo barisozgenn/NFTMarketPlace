@@ -28,7 +28,7 @@ export default function NFTAuctionForm({ nftAuction }: Props) {
             reset({ name, collection, artist, indexInCollection, tags });
         }
         setFocus('name');
-    }, [setFocus])
+    }, [setFocus, reset, nftAuction]) //we are adding here dependencies
 
     async function onSubmit(data: FieldValues) {
         try {

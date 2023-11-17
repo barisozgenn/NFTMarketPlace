@@ -10,7 +10,7 @@ export const authOptions: NextAuthOptions = {
             id: 'id-server',
             clientId: 'nextApp',
             clientSecret: 'secret',//which is not a very secret secret :D for development is ok
-            issuer: 'http://localhost:5029',
+            issuer: process.env.IDENTITY_URL, //in .env.local
             authorization: {params: {scope: 'openid profile nftAuctionApp'}},
             idToken: true
         })
