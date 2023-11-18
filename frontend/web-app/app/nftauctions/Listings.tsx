@@ -61,9 +61,13 @@ export default function Listings() {
             ) : (
                 <>
                     <div className='grid grid-cols-4 gap-6'>
-                        {data.nftAuctions.map(auction => (
-                            <NFTAuctionCard nftauction={auction} key={auction.id} />
-                        ))}
+                    {data && data.nftAuctions ? (
+                    data.nftAuctions.map(auction => (
+                        <NFTAuctionCard nftauction={auction} key={auction.id} />
+                    ))
+                    ) : (
+                            <p>No auctions available.</p>
+                        )}
                     </div>
                     <div className='flex justify-center mt-4'>
                         <AppPagination pageChanged={setPageNumber}

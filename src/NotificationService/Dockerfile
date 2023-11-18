@@ -17,7 +17,7 @@ COPY src/IdentityService/IdentityService.csproj src/IdentityService/IdentityServ
 RUN dotnet restore NFTMarketPlace.sln
 
 # Copy the app folders over
-COPY src/SearchService src/NotificationService
+COPY src/NotificationService src/NotificationService
 #this one dependency
 COPY src/Contracts src/Contracts
 WORKDIR /app/src/NotificationService

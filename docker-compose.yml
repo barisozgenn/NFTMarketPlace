@@ -28,7 +28,7 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
-  nfauction-service:
+  nftauction-service:
     container_name: app_nftauction_service_container
     image: barisozgenn/nftauction-service:latest
     build:
@@ -76,6 +76,9 @@ services:
     depends_on:
       - mongodb
       - rabbitmq
+      - nftauction-service
+      - gateway-service
+    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "./wait-for-it.sh", "nftauction-service:80", "--", "dotnet", "SearchService.dll"]
   identity-service:
     container_name: app_identity_service_container
     image: barisozgenn/identity-service:latest
@@ -120,7 +123,7 @@ services:
       - RabbitMq__Host=rabbitmq
       - ConnectionStrings__MongoBidDbBarisDevConnection=mongodb://root:mongobarispassword@mongodb #instead of localhost:27017
       - IdentityServiceUrl=http://identity-service
-      - GrpcNFTAuction=http://nfauction-service:7777
+      - GrpcNFTAuction=http://nftauction-service:7777
     ports:
       - 7003:80
     depends_on:
@@ -140,18 +143,18 @@ services:
       - 7004:80
     depends_on:
       - rabbitmq
-#  web-app:
-#    container_name: app_web_app_container
-#    image: barisozgenn/web-app
-#    build:
+# web-app:
+#   container_name: app_web_app_container
+#   image: barisozgenn/web-app
+#   build:
 #     context: .
 #     dockerfile: frontend/web-app/Dockerfile
-#    volumes:
+#   volumes:
 #     - /var/lib/web/data
 #    extra_hosts:
 #     - id.nftmarketplace.com:10.5.0.200
-#    environment: # those are coming from .env.local file
-#    - NEXTAUTH_SECRET=somethingreallysecretbaris
+#   environment: # those are coming from .env.local file
+#     - NEXTAUTH_SECRET=somethingreallysecretbaris
 #     - NEXTAUTH_URL=http://app.nftmarketplace.com #externally it's going to use this URL
 #     - NEXTAUTH_URL_INTERNAL=http://web-app:3000 #internally it's going to use this URL
 #     - API_URL=http://gateway-service/

@@ -33,8 +33,8 @@ builder.Services.AddMassTransit(mst =>
             host.Username(builder.Configuration.GetValue("RabbitMq:Username", "guest"));
             host.Password(builder.Configuration.GetValue("RabbitMq:Password", "guest"));
         });
-        // Setting up a RabbitMQ message consumer for the "search-auction-created" endpoint.
-        configuration.ReceiveEndpoint("search-auction-created", enf =>
+        // Setting up a RabbitMQ message consumer for the "search-nftauction-created" endpoint.
+        configuration.ReceiveEndpoint("search-nftauction-created", enf =>
         {
             //define the number of retries and the time in between the retries.
             enf.UseMessageRetry(r => r.Interval(5, 5));

@@ -20,12 +20,16 @@ public class NFTAuctionServiceHttpClient
 
     public async Task<List<NFTAuctionItem>> GetItemsToSearchDbFromHttpClient()
     {
-        var lastUpdated = await DB.Find<NFTAuctionItem, string>()
+        /*var lastUpdated = await DB.Find<NFTAuctionItem, string>()
             .Sort(x => x.Descending(x => x.UpdatedAt))
             .Project(x => x.UpdatedAt.ToString())
-            .ExecuteFirstAsync();
-
+            .ExecuteFirstAsync();*/
+        /*
         return await _httpClient.GetFromJsonAsync<List<NFTAuctionItem>>(_configuration["NFTAuctionServiceUrl"]
-                                                            + "/api/nftauctions/httpClient?date=" + lastUpdated);
+                                                    + "/api/nftauctions/httpClient?baris=wasHere&date=" + lastUpdated);
+        */    
+        var lastUpdated = DateTime.UtcNow;
+        return await _httpClient.GetFromJsonAsync<List<NFTAuctionItem>>(_configuration["GatewayServiceUrl"]//GatewayServiceUrl
+                                                            + "/nftauctions/httpClient?&date=" + lastUpdated);
     }
 }

@@ -12,7 +12,7 @@ public class DbInitializer
     //OPINION: in a real big enterprise level application, you wouldn't be using MongoDB to provide the search 
     //You would be using something different with better technologies to go out and crawl the content that you want to index and put in that database.
     public static async Task InitDb(WebApplication app){
-        await DB.InitAsync("SearchNftAuctionDb",
+        await DB.InitAsync("SearchNftAuctioDb",
                 MongoClientSettings.FromConnectionString(app.Configuration.
                                                         GetConnectionString("MongoDbBarisDevConnection")));//mongodb://username:password@hostname:port
         //create an index for our item for the certain fields that we want to be able to search on.
@@ -39,6 +39,6 @@ public class DbInitializer
         var httpClient = scope.ServiceProvider.GetRequiredService<NFTAuctionServiceHttpClient>();
         var items = await httpClient.GetItemsToSearchDbFromHttpClient();
         Console.WriteLine("DEBUG: returned from http nft auction service: "+items.Count);
-        if(items.Count>0)await DB.SaveAsync(items);
+        if(items.Count != nftItemsCount)await DB.SaveAsync(items);
     }
 }
